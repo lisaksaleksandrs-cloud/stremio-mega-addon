@@ -70,14 +70,16 @@ async function searchFastTorrent(query) {
 
 // --- ОСНОВНАЯ ЛОГИКА ---
 
-app.get('/manifest.json', (req, res) => {
+// Маршрут для манифеста (теперь поймет любой путь, заканчивающийся на manifest.json)
+app.get('*/manifest.json', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    res.setHeader('Content-Type', 'application/json');
     res.json(manifest);
 });
 
-app.get('/stream/:type/:id.json', async (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    const { type, id } = req.params;
+// Маршрут для стримов (добавлена звездочка в начале)
+app.get('*/stream/:type/:id.json', async (req, res) => {
 
     try {
         // 1. Получаем название фильма из Stremio
